@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "public")));
 
 const PORT = 3020;
-const DATA_FILE = path.join('/tmp', "data.json");
+const DATA_FILE = join('/tmp', "data.json");
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 const readData = () => {
