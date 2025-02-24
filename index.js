@@ -83,6 +83,7 @@ app.delete("/items/:id", (req, res) => {
   res.json({ message: "Item deleted", id });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+const APP_PORT = process.env.PORT || 3003;
+app.listen(APP_PORT, () => {
+  console.log(`Server running at http://localhost:${APP_PORT}`);
 });
