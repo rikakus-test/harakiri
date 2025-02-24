@@ -71,9 +71,9 @@ app.put("/items/:id", (req, res) => {
     status: req.body.status || data[index].status,
   };
   data[index] = req.body
+  res.json(data[index]);
 
   writeData(data);
-  res.json(data[index]);
 });
 
 app.delete("/items/:id", (req, res) => {
