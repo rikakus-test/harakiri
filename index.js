@@ -67,12 +67,13 @@ app.put("/items/:id", (req, res) => {
 
   data[index] = {
     ...data[index], // Pertahankan data lama
-    name: req.body.name || data[index].name, // Update jika ada, jika tidak tetap sama
+    name: req.body.name || data[index].name,
     status: req.body.status || data[index].status,
   };
+  data[index] = req.body
 
-  writeData(data); // Simpan perubahan ke file JSON
-  res.json(data[index]); // Kirim data yang sudah diperbarui
+  writeData(data);
+  res.json(data[index]);
 });
 
 app.delete("/items/:id", (req, res) => {
