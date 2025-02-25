@@ -22,8 +22,9 @@ module.exports = {
   },
   itemsDetail: async (req, res) => {
     try {
+      const id = req.params.id;
       itemsModel
-        .getDataId()
+        .getDataId(id)
         .then(async (result) => {
           success(res, result, "success", "Berhasil Mendapatkan Item");
         })
