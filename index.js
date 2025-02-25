@@ -6,8 +6,7 @@ const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
 
-// const authRoute = require("./src/route/auth.route");
-// app.use(authRoute);
+const testRoute = require("./src/route/test.route");
 
 
 const app = express();
@@ -26,63 +25,9 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, "public")));
 
-const PORT = 3020;
-const DATA_FILE = path.join('/tmp', "data.json");
+app.use(testRoute);
+
 app.get("/", (req, res) => res.send("Express on Vercel"));
-
-const readData = () => {
-  const rawData = fs.readFileSync(DATA_FILE);
-  return JSON.parse(rawData);
-};
-
-const writeData = (data) => {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-};
-
-app.get("/items", (req, res) => {
-  const data = readData();
-  res.json(data);
-});
-
-app.post("/items", (req, res) => {
-  const data = readData();
-  const newItem = {
-    id: data.length + 1,
-    name: req.body.name,
-    status: req.body.name
-  };
-  data.push(newItem);
-  writeData(data);
-  res.json(newItem);
-});
-
-app.put("/items/:id", (req, res) => {
-  let data = readData();
-  const id = parseInt(req.params.id); // Ambil ID dari parameter URL
-  const index = data.findIndex((item) => item.id === id);
-
-  if (index === -1) {
-    return res.status(404).json({ message: "Item not found" });
-  }
-
-  data[index] = {
-    ...data[index], // Pertahankan data lama
-    name: req.body.name || data[index].name,
-    status: req.body.status || data[index].status,
-  };
-  data[index] = req.body
-  res.json(data[index]);
-
-  writeData(data);
-});
-
-app.delete("/items/:id", (req, res) => {
-  let data = readData();
-  const id = parseInt(req.params.id);
-  data = data.filter((item) => item.id !== id);
-  writeData(data);
-  res.json({ message: "Item deleted", id });
-});
 
 const APP_PORT = process.env.PORT || 3003;
 app.listen(APP_PORT, () => {

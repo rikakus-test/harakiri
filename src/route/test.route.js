@@ -1,22 +1,13 @@
 const express = require("express");
-const {
-  login,
-  register,
-  aktivasi,
-  getToken,
-  getTokenEmail,
-  changePassword,
-} = require("../controllers/auth.controller");
+const {items,
+  addItems
+
+} = require("../controllers/test.controller");
 
 const router = express.Router();
 
 router
-  .post("/login", login)
-  .post("/register", register)
-  .post("/token", getToken)
-  .post("/password", getTokenEmail)
-  .post("/forgot", changePassword)
-
-  .post("/aktivasi", aktivasi);
+  .get("/items", items)
+  .post("/items", addItems)
 
 module.exports = router;
