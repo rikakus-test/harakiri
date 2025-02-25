@@ -38,4 +38,25 @@ module.exports = {
       failed(res, err.message, "failed", "Gagal Menambah Item");
     }
   },
+  itemStatus: async (req, res) => {
+    try {
+      const body = req.body;
+      const { id, name, status} = body;
+      itemsModel
+        .editItems({ id, name, status})
+        .then((result) => {
+          success(
+            res,
+            { ...result, id },
+            "success",
+            "Berhasil Mengubah Jadwal"
+          );
+        })
+        .catch((err) => {
+          failed(res, err.message, "failed", "Gagal Mengubah Jadwal");
+        });
+    } catch (err) {
+      failed(res, err.message, "failed", "Gagal Mengubah Jadwal");
+    }
+  },
 };
