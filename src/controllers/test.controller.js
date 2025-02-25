@@ -40,7 +40,6 @@ module.exports = {
       const body = req.body;
       const { name, status} = body;
       const id = uuidv4();
-      console.log(hadir);
       itemsModel
         .addItems({ id, name, status})
         .then((result) => {
