@@ -39,7 +39,7 @@ const itemsModel = {
     const { id, name, status} = data;
     return new Promise((resolve, reject) => {
       db.query(
-        `UPDATE items SET masuk='${name}',status='${status}' WHERE id='${id}' `,
+        `UPDATE items SET name='${name}',status='${status}' WHERE id='${id}' `,
         (err, res) => {
           if (err) {
             reject(err);
