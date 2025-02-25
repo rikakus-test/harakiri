@@ -20,6 +20,20 @@ module.exports = {
       failed(res, err.message, "failed", "Gagal  Mendapatkan Item");
     }
   },
+  itemsDetail: async (req, res) => {
+    try {
+      itemsModel
+        .getDataId()
+        .then(async (result) => {
+          success(res, result, "success", "Berhasil Mendapatkan Item");
+        })
+        .catch((err) => {
+          failed(res, err.message, "failed", "Gagal Mendapatkan Item");
+        });
+    } catch (err) {
+      failed(res, err.message, "failed", "Gagal  Mendapatkan Item");
+    }
+  },
   addItems: async (req, res) => {
     try {
       const body = req.body;
