@@ -49,14 +49,29 @@ module.exports = {
             res,
             { ...result, id },
             "success",
-            "Berhasil Mengubah Jadwal"
+            "Berhasil Mengubah Item"
           );
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Mengubah Jadwal");
+          failed(res, err.message, "failed", "Gagal Mengubah Item");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal Mengubah Jadwal");
+      failed(res, err.message, "failed", "Gagal Mengubah Item");
+    }
+  },
+  deleteItems: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      itemsModel.deleteItems(id)
+        .then((result) => {
+          success(res, { ...result, id }, "success", "Berhasil Menghapus Item");
+        })
+        .catch((err) => {
+          failed(res, err.message, "failed", "Gagal Menghapus Item");
+        });
+    } catch (err) {
+      failed(res, err.message, "failed", "Gagal Menghapus Item");
     }
   },
 };

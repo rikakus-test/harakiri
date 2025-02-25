@@ -1,7 +1,8 @@
 const express = require("express");
 const {items,
   addItems,
-  itemStatus
+  itemStatus,
+  deleteItems
 
 } = require("../controllers/test.controller");
 
@@ -11,5 +12,7 @@ router
   .get("/items", items)
   .post("/items", addItems)
   .put("/itemstatus/:id", itemStatus)
+  .delete("/items/:id", deleteItems)
+
 
 module.exports = router;
