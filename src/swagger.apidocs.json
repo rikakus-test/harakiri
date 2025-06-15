@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "HaraKiri API",
+    "version": "1.0.0",
+    "description": "Dokumentasi API dari project harakiri"
+  },
+
+  "paths": {
+    "/items": {
+      "get": {
+        "summary": "Ambil semua items",
+        "tags": ["Items"],
+        "responses": {
+          "200": {
+            "description": "Berhasil ambil data"
+          }
+        }
+      },
+      "post": {
+        "summary": "Tambah item baru",
+        "tags": ["Items"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "status": { "type": "boolean" }
+                },
+                "required": ["name", "status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item berhasil ditambahkan"
+          }
+        }
+      }
+    },
+    "/items/{id}": {
+      "get": {
+        "summary": "Ambil item berdasarkan ID",
+        "tags": ["Items"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Item ditemukan" },
+          "404": { "description": "Item tidak ditemukan" }
+        }
+      },
+      "delete": {
+        "summary": "Hapus item berdasarkan ID",
+        "tags": ["Items"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Item dihapus" }
+        }
+      }
+    },
+    "/itemstatus/{id}": {
+      "put": {
+        "summary": "Ubah item (name dan status)",
+        "tags": ["Items"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "status": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Item diperbarui" }
+        }
+      }
+    },
+
+    "/users": {
+      "get": {
+        "summary": "Ambil semua user",
+        "tags": ["Users"],
+        "responses": {
+          "200": { "description": "Daftar user" }
+        }
+      },
+      "post": {
+        "summary": "Tambah user",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "home_id": { "type": "string" },
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "pass": { "type": "string" },
+                  "role": { "type": "string" }
+                },
+                "required": ["home_id", "username", "email", "pass", "role"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "User ditambahkan" }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Ambil user berdasarkan ID",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "User ditemukan" }
+        }
+      },
+      "put": {
+        "summary": "Update user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "home_id": { "type": "string" },
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "pass": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User diperbarui" }
+        }
+      },
+      "delete": {
+        "summary": "Hapus user",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "User dihapus" }
+        }
+      }
+    },
+
+    "/arduinos": {
+      "get": {
+        "summary": "Ambil semua Arduino",
+        "tags": ["Arduinos"],
+        "responses": {
+          "200": { "description": "Daftar Arduino" }
+        }
+      },
+      "post": {
+        "summary": "Tambah Arduino",
+        "tags": ["Arduinos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ip": { "type": "string" },
+                  "login": { "type": "string" },
+                  "password": { "type": "string" },
+                  "arduino_name": { "type": "string" },
+                  "status": { "type": "boolean" }
+                },
+                "required": [
+                  "ip",
+                  "login",
+                  "password",
+                  "arduino_name",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Arduino ditambahkan" }
+        }
+      }
+    },
+    "/arduinos/{id}": {
+      "get": {
+        "summary": "Ambil Arduino berdasarkan ID",
+        "tags": ["Arduinos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Arduino ditemukan" }
+        }
+      },
+      "put": {
+        "summary": "Update Arduino",
+        "tags": ["Arduinos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ip": { "type": "string" },
+                  "login": { "type": "string" },
+                  "password": { "type": "string" },
+                  "arduino_name": { "type": "string" },
+                  "status": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Arduino diperbarui" }
+        }
+      },
+      "delete": {
+        "summary": "Hapus Arduino",
+        "tags": ["Arduinos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Arduino dihapus" }
+        }
+      }
+    }
+  }
+}

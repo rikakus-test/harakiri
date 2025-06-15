@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 const date = require("../helpers/date");
 const itemsModel = require("../models/test.model");
-const usersModel = require("../models/auth.model");
 
 module.exports = {
   items: async (req, res) => {
