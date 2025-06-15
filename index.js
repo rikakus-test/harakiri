@@ -12,7 +12,9 @@ const usersRoutes = require("./src/route/users.route");
 const arduinoRoutes = require("./src/route/arduinos.route");
 const swaggerUi = require("swagger-ui-express");
 const swaggerdocs = require("./src/swagger.apidocs.json");
-
+const http = require("http");
+const socketIo = require("socket.io");
+const { setupWebSocket, io } = require("./src/helpers/socket");
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,7 +31,9 @@ app.use((req, res, next) => {
 
 
 app.use(express.static(path.join(__dirname, "public")));
+const server = http.createServer(app);
 
+setupWebSocket(server);
 app.use(testRoute);
 app.use(usersRoutes);
 app.use(homeRoutes);

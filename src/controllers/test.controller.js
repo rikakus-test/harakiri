@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 const date = require("../helpers/date");
 const itemsModel = require("../models/test.model");
+const { io } = require("../helpers/sockets");
 
 module.exports = {
   items: async (req, res) => {
@@ -51,27 +52,27 @@ module.exports = {
       failed(res, err.message, "failed", "Gagal Menambah Item");
     }
   },
-  itemStatus: async (req, res) => {
-    try {
-      const body = req.body;
-      const { id, name, status} = body;
-      itemsModel
-        .editItems({ id, name, status})
-        .then((result) => {
-          success(
-            res,
-            { ...result, id },
-            "success",
-            "Berhasil Mengubah Item"
-          );
-        })
-        .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Mengubah Item");
-        });
-    } catch (err) {
-      failed(res, err.message, "failed", "Gagal Mengubah Item");
-    }
-  },
+itemStatus: async (req, res) => {
+  try {
+    const body = req.body;
+    const { id, name, status } = body;
+
+    itemsModel
+      .editItems({ id, name, status })
+      .then((result) => {
+        const updatedItem = { ...result, id, name, status };
+
+  io.to(id).emit("statusUpdate", { status });
+
+        success(res, updatedItem, "success", "Berhasil Mengubah Item");
+      })
+      .catch((err) => {
+        failed(res, err.message, "failed", "Gagal Mengubah Item");
+      });
+  } catch (err) {
+    failed(res, err.message, "failed", "Gagal Mengubah Item");
+  }
+},
   deleteItems: async (req, res) => {
     try {
       const id = req.params.id;
