@@ -36,7 +36,4 @@ app.use(homeRoutes);
 app.use(arduinoRoutes);
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
-const APP_PORT = process.env.PORT || 3003;
-app.listen(APP_PORT, () => {
-  console.log(`Server running at http://localhost:${APP_PORT}`);
-});
+app.listen(process.env.PORT || 80, "0.0.0.0" );
