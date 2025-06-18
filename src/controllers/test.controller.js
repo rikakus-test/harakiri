@@ -62,8 +62,6 @@ itemStatus: async (req, res) => {
       .then((result) => {
         const updatedItem = { ...result, id, name, status };
 
-  io.to(id).emit("statusUpdate", { status });
-
         success(res, updatedItem, "success", "Berhasil Mengubah Item");
       })
       .catch((err) => {
