@@ -1,19 +1,22 @@
 const express = require("express");
 const {
-  getHomes,
+  getAllHomes,
   getHomeDetail,
   addHome,
   updateHome,
   deleteHome,
+  detailWithRelations,
 } = require("../controllers/home.controller");
 
 const router = express.Router();
 
 router
-  .get("/homes", getHomes)
-  .get("/homes/:id", getHomeDetail)
-  .post("/homes", addHome)
-  .put("/homes/:id", updateHome)
-  .delete("/homes/:id", deleteHome);
+  .get("/home", getAllHomes)
+  .get("/home/:id", getHomeDetail)
+  .post("/home", addHome)
+  .put("/home", updateHome)
+  .delete("/home/:id", deleteHome)
+  .get("/home/expanded/:id", detailWithRelations)
+
 
 module.exports = router;

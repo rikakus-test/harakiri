@@ -1,11 +1,11 @@
 const express = require("express");
 const {items,
   addItems,
-  itemStatus,
+  updateItems,
   deleteItems,
   itemsDetail
 
-} = require("../controllers/test.controller");
+} = require("../controllers/device.controller");
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router
   .get("/items", items)
   .get("/items/:id", itemsDetail)
   .post("/items", addItems)
-  .put("/itemstatus/:id", itemStatus)
+  .put("/itemstatus/:id", updateItems)
   .delete("/items/:id", deleteItems)
 
 

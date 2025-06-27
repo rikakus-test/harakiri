@@ -1,64 +1,69 @@
 const db = require("../config/db");
 
-const homesModel = {
-  getAllHomes: () => {
+const homeModel = {
+  getAll: () => {
     return new Promise((resolve, reject) => {
-      db.query("SELECT * FROM homes", (err, res) => {
-        if (err) return reject(err);
+      db.query("SELECT * FROM home", (err, res) => {
+        if (err) reject(err);
         resolve(res);
       });
     });
   },
 
-  getHomeById: (home_id) => {
+  getById: (id) => {
     return new Promise((resolve, reject) => {
-      db.query(
-        "SELECT * FROM homes WHERE home_id = ?",
-        [home_id],
-        (err, res) => {
-          if (err) return reject(err);
-          resolve(res[0]);
-        }
-      );
+      db.query("SELECT * FROM home WHERE id = ?", [id], (err, res) => {
+        if (err) reject(err);
+        resolve(res[0]);
+      });
     });
   },
 
-  addHome: (data) => {
-    const { home_id, arduino_id, home_name, tab_ip } = data;
+  create: ({ id, name }) => {
     return new Promise((resolve, reject) => {
-      db.query(
-        `INSERT INTO homes (home_id, arduino_id, home_name, tab_ip) VALUES (?, ?, ?, ?)`,
-        [home_id, arduino_id, home_name, tab_ip],
-        (err, res) => {
-          if (err) return reject(err);
-          resolve(res);
-        }
-      );
-    });
-  },
-
-  updateHome: (data) => {
-    const { home_id, arduino_id, home_name, tab_ip } = data;
-    return new Promise((resolve, reject) => {
-      db.query(
-        `UPDATE homes SET arduino_id = ?, home_name = ?, tab_ip = ? WHERE home_id = ?`,
-        [arduino_id, home_name, tab_ip, home_id],
-        (err, res) => {
-          if (err) return reject(err);
-          resolve(res);
-        }
-      );
-    });
-  },
-
-  deleteHome: (home_id) => {
-    return new Promise((resolve, reject) => {
-      db.query(`DELETE FROM homes WHERE home_id = ?`, [home_id], (err, res) => {
-        if (err) return reject(err);
+      db.query("INSERT INTO home (id, name) VALUES (?, ?)", [id, name], (err, res) => {
+        if (err) reject(err);
         resolve(res);
+      });
+    });
+  },
+
+  update: ({ id, name }) => {
+    return new Promise((resolve, reject) => {
+      db.query("UPDATE home SET name = ? WHERE id = ?", [name, id], (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
+  },
+
+  delete: (id) => {
+    return new Promise((resolve, reject) => {
+      db.query("DELETE FROM home WHERE id = ?", [id], (err, res) => {
+        if (err) reject(err);
+        resolve(res);
+      });
+    });
+  },
+  getHomeWithRelations: (id) => {
+    return new Promise((resolve, reject) => {
+      const query = `
+        SELECT 
+          h.*,
+          (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', u.id, 'username', u.username, 'email', u.email))
+           FROM users u WHERE u.home_id = h.id) AS users,
+          (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', a.id, 'name', a.name, 'status', a.status))
+           FROM arduino a WHERE a.home_id = h.id) AS arduino
+        FROM home h
+        WHERE h.id = ?;
+      `;
+
+      db.query(query, [id], (err, res) => {
+        if (err) return reject(err);
+        resolve(res[0]);
       });
     });
   },
 };
 
-module.exports = homesModel;
+module.exports = homeModel;

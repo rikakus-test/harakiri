@@ -2,13 +2,12 @@ const { success, failed } = require("../helpers/response");
 const { v4: uuidv4 } = require("uuid");
 const moment = require("moment");
 const date = require("../helpers/date");
-const itemsModel = require("../models/test.model");
-const { io } = require("../helpers/socket");
+const deviceModel = require("../models/device.model");
 
 module.exports = {
   items: async (req, res) => {
     try {
-      itemsModel
+      deviceModel
         .getAllData()
         .then(async (result) => {
           success(res, result, "success", "Berhasil Mendapatkan Item");
@@ -23,7 +22,7 @@ module.exports = {
   itemsDetail: async (req, res) => {
     try {
       const id = req.params.id;
-      itemsModel
+      deviceModel
         .getDataId(id)
         .then(async (result) => {
           success(res, result, "success", "Berhasil Mendapatkan Item");
@@ -40,7 +39,7 @@ module.exports = {
       const body = req.body;
       const { name, status} = body;
       const id = uuidv4();
-      itemsModel
+      deviceModel
         .addItems({ id, name, status})
         .then((result) => {
           success(res, { ...result, id }, "success", "Berhasil Menambah Item");
@@ -52,12 +51,12 @@ module.exports = {
       failed(res, err.message, "failed", "Gagal Menambah Item");
     }
   },
-itemStatus: async (req, res) => {
+updateItems: async (req, res) => {
   try {
     const body = req.body;
     const { id, name, status } = body;
 
-    itemsModel
+    deviceModel
       .editItems({ id, name, status })
       .then((result) => {
         const updatedItem = { ...result, id, name, status };
@@ -75,7 +74,7 @@ itemStatus: async (req, res) => {
     try {
       const id = req.params.id;
 
-      itemsModel.deleteItems(id)
+      deviceModel.deleteItems(id)
         .then((result) => {
           success(res, { ...result, id }, "success", "Berhasil Menghapus Item");
         })

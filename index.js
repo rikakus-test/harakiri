@@ -4,18 +4,13 @@ const helmet = require("helmet");
 const xss = require("xss-clean");
 const cors = require("cors");
 const path = require("path");
-const fs = require("fs");
 
-const testRoute = require("./src/route/test.route");
+const deviceRoute = require("./src/route/device.route");
 const homeRoutes = require("./src/route/home.route");
 const usersRoutes = require("./src/route/users.route");
-const arduinoRoutes = require("./src/route/arduinos.route");
+const arduinoRoutes = require("./src/route/arduino.route");
 const swaggerUi = require("swagger-ui-express");
 const swaggerdocs = require("./src/swagger.apidocs.json");
-const http = require("http");
-const socketIo = require("socket.io");
-const { setupWebSocket, io } = require("./src/helpers/socket");
-
 const app = express();
 app.use(bodyParser.json());
 app.use(xss());
@@ -31,13 +26,11 @@ app.use((req, res, next) => {
 
 
 app.use(express.static(path.join(__dirname, "public")));
-const server = http.createServer(app);
 
-setupWebSocket(server);
-app.use(testRoute);
+app.use(deviceRoute);
 app.use(usersRoutes);
 app.use(homeRoutes);
 app.use(arduinoRoutes);
-app.get("/", (req, res) => res.send("Express on Vercel"));
+app.get("/", (req, res) => res.send("Express on"));
 
 app.listen(process.env.PORT || 80, "0.0.0.0" );

@@ -1,28 +1,28 @@
 const { success, failed } = require("../helpers/response");
 const { v4: uuidv4 } = require("uuid");
-const homesModel = require("../models/home.model");
+const homeModel = require("../models/home.model");
 
 module.exports = {
-  getHomes: async (req, res) => {
+  getAllHomes: async (req, res) => {
     try {
-      homesModel
-        .getAllHomes()
+      homeModel
+        .getAll()
         .then((result) => {
-          success(res, result, "success", "Berhasil Mendapatkan Semua Home");
+          success(res, result, "success", "Berhasil Mendapatkan Data Home");
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Mendapatkan Home");
+          failed(res, err.message, "failed", "Gagal Mendapatkan Data Home");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal Mendapatkan Home");
+      failed(res, err.message, "failed", "Gagal Mendapatkan Data Home");
     }
   },
 
   getHomeDetail: async (req, res) => {
     try {
       const id = req.params.id;
-      homesModel
-        .getHomeById(id)
+      homeModel
+        .getById(id)
         .then((result) => {
           success(res, result, "success", "Berhasil Mendapatkan Detail Home");
         })
@@ -36,39 +36,30 @@ module.exports = {
 
   addHome: async (req, res) => {
     try {
-      const { arduino_id, home_name, tab_ip } = req.body;
-      const home_id = uuidv4();
-      homesModel
-        .addHome({ home_id, arduino_id, home_name, tab_ip })
+      const { name } = req.body;
+      const id = uuidv4();
+
+      homeModel
+        .create({ id, name })
         .then((result) => {
-          success(
-            res,
-            { ...result, home_id },
-            "success",
-            "Berhasil Menambah Home"
-          );
+          success(res, { ...result, id }, "success", "Berhasil Menambahkan Home");
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Menambah Home");
+          failed(res, err.message, "failed", "Gagal Menambahkan Home");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal Menambah Home");
+      failed(res, err.message, "failed", "Gagal Menambahkan Home");
     }
   },
 
   updateHome: async (req, res) => {
     try {
-      const { arduino_id, home_name, tab_ip } = req.body;
-      const home_id = req.params.id;
-      homesModel
-        .updateHome({ home_id, arduino_id, home_name, tab_ip })
+      const { id, name } = req.body;
+
+      homeModel
+        .update({ id, name })
         .then((result) => {
-          success(
-            res,
-            { ...result, home_id },
-            "success",
-            "Berhasil Mengubah Home"
-          );
+          success(res, { ...result, id, name }, "success", "Berhasil Mengubah Home");
         })
         .catch((err) => {
           failed(res, err.message, "failed", "Gagal Mengubah Home");
@@ -81,8 +72,9 @@ module.exports = {
   deleteHome: async (req, res) => {
     try {
       const id = req.params.id;
-      homesModel
-        .deleteHome(id)
+
+      homeModel
+        .delete(id)
         .then((result) => {
           success(res, { ...result, id }, "success", "Berhasil Menghapus Home");
         })
@@ -91,6 +83,18 @@ module.exports = {
         });
     } catch (err) {
       failed(res, err.message, "failed", "Gagal Menghapus Home");
+    }
+  },
+  detailWithRelations: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const result = await homeModel.getHomeWithRelations(id);
+      if (!result) {
+        return failed(res, "Data tidak ditemukan", "failed", "Not Found");
+      }
+      success(res, result, "success", "Berhasil mendapatkan detail Home beserta relasinya");
+    } catch (err) {
+      failed(res, err.message, "failed", "Gagal mendapatkan data Home");
     }
   },
 };

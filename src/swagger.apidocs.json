@@ -1,123 +1,54 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "HaraKiri API",
+    "title": "Smart Home API",
     "version": "1.0.0",
-    "description": "Dokumentasi API dari project harakiri"
+    "description": "API untuk mengelola data Home, Users, Arduino, dan Devices"
   },
-
+  "tags": [
+    { "name": "Home", "description": "Manajemen data Home" },
+    { "name": "Users", "description": "Manajemen data User" },
+    { "name": "Arduino", "description": "Manajemen data Arduino" },
+    { "name": "Devices", "description": "Manajemen data Device" }
+  ],
   "paths": {
-    "/items": {
-      "get": {
-        "summary": "Ambil semua items",
-        "tags": ["Items"],
-        "responses": {
-          "200": {
-            "description": "Berhasil ambil data"
-          }
-        }
-      },
+    "/home": {
+      "get": { "tags": ["Home"], "summary": "Ambil semua home", "responses": { "200": { "description": "Daftar home" } } },
       "post": {
-        "summary": "Tambah item baru",
-        "tags": ["Items"],
+        "tags": ["Home"], "summary": "Tambah home",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "status": { "type": "boolean" }
-                },
-                "required": ["name", "status"]
-              }
+              "schema": { "type": "object", "properties": { "name": { "type": "string" } } }
             }
           }
         },
-        "responses": {
-          "201": {
-            "description": "Item berhasil ditambahkan"
-          }
-        }
-      }
-    },
-    "/items/{id}": {
-      "get": {
-        "summary": "Ambil item berdasarkan ID",
-        "tags": ["Items"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Item ditemukan" },
-          "404": { "description": "Item tidak ditemukan" }
-        }
+        "responses": { "200": { "description": "Home ditambahkan" } }
       },
-      "delete": {
-        "summary": "Hapus item berdasarkan ID",
-        "tags": ["Items"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Item dihapus" }
-        }
-      }
-    },
-    "/itemstatus/{id}": {
       "put": {
-        "summary": "Ubah item (name dan status)",
-        "tags": ["Items"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
+        "tags": ["Home"], "summary": "Ubah home",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": { "type": "string" },
-                  "status": { "type": "boolean" }
-                }
-              }
+              "schema": { "type": "object", "properties": { "id": { "type": "string" }, "name": { "type": "string" } } }
             }
           }
         },
-        "responses": {
-          "200": { "description": "Item diperbarui" }
-        }
+        "responses": { "200": { "description": "Home diubah" } }
       }
     },
-
+    "/home/{id}": {
+      "get": { "tags": ["Home"], "summary": "Detail home", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail home" } } },
+      "delete": { "tags": ["Home"], "summary": "Hapus home", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Home dihapus" } } }
+    },
+    "/home/expanded/{id}": {
+      "get": { "tags": ["Home"], "summary": "Detail home and relation", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail home and relation" } } }
+    },
     "/users": {
-      "get": {
-        "summary": "Ambil semua user",
-        "tags": ["Users"],
-        "responses": {
-          "200": { "description": "Daftar user" }
-        }
-      },
-      "post": {
-        "summary": "Tambah user",
-        "tags": ["Users"],
+      "get": { "tags": ["Users"], "summary": "Ambil semua user", "responses": { "200": { "description": "Daftar user" } } },
+      "post": { "tags": ["Users"], "summary": "Tambah user",
         "requestBody": {
           "required": true,
           "content": {
@@ -126,187 +57,128 @@
                 "type": "object",
                 "properties": {
                   "home_id": { "type": "string" },
+                  "pass": { "type": "string" },
                   "username": { "type": "string" },
                   "email": { "type": "string" },
-                  "pass": { "type": "string" },
-                  "role": { "type": "string" }
-                },
-                "required": ["home_id", "username", "email", "pass", "role"]
+                  "role": { "type": "string" },
+                  "token": { "type": "string" }
+                }
               }
             }
           }
         },
-        "responses": {
-          "201": { "description": "User ditambahkan" }
-        }
+        "responses": { "200": { "description": "User ditambahkan" } }
+      },
+      "put": { "tags": ["Users"], "summary": "Ubah user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "home_id": { "type": "string" },
+                  "pass": { "type": "string" },
+                  "username": { "type": "string" },
+                  "email": { "type": "string" },
+                  "role": { "type": "string" },
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "User diubah" } }
       }
     },
     "/users/{id}": {
-      "get": {
-        "summary": "Ambil user berdasarkan ID",
-        "tags": ["Users"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "User ditemukan" }
-        }
-      },
-      "put": {
-        "summary": "Update user",
-        "tags": ["Users"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "home_id": { "type": "string" },
-                  "username": { "type": "string" },
-                  "email": { "type": "string" },
-                  "pass": { "type": "string" },
-                  "role": { "type": "string" }
-                }
+      "get": { "tags": ["Users"], "summary": "Detail user", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail user" } } },
+      "delete": { "tags": ["Users"], "summary": "Hapus user", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "User dihapus" } } }
+    },
+    "/binding/{id}": {
+      "put": { "tags": ["Users"], "summary": "Binding user", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "home_id": { "type": "string" }
               }
             }
           }
-        },
-        "responses": {
-          "200": { "description": "User diperbarui" }
         }
       },
-      "delete": {
-        "summary": "Hapus user",
-        "tags": ["Users"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "User dihapus" }
-        }
-      }
+      "responses": { "200": { "description": "User Binding" } }
+    }
     },
-
-    "/arduinos": {
-      "get": {
-        "summary": "Ambil semua Arduino",
-        "tags": ["Arduinos"],
-        "responses": {
-          "200": { "description": "Daftar Arduino" }
-        }
-      },
-      "post": {
-        "summary": "Tambah Arduino",
-        "tags": ["Arduinos"],
+    "/arduino": {
+      "get": { "tags": ["Arduino"], "summary": "Ambil semua arduino", "responses": { "200": { "description": "Daftar arduino" } } },
+      "post": { "tags": ["Arduino"], "summary": "Tambah arduino",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ip": { "type": "string" },
-                  "login": { "type": "string" },
-                  "password": { "type": "string" },
-                  "arduino_name": { "type": "string" },
-                  "status": { "type": "boolean" }
-                },
-                "required": [
-                  "ip",
-                  "login",
-                  "password",
-                  "arduino_name",
-                  "status"
-                ]
-              }
+              "schema": { "type": "object", "properties": { "home_id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "boolean" } } }
             }
           }
         },
-        "responses": {
-          "201": { "description": "Arduino ditambahkan" }
-        }
-      }
-    },
-    "/arduinos/{id}": {
-      "get": {
-        "summary": "Ambil Arduino berdasarkan ID",
-        "tags": ["Arduinos"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Arduino ditemukan" }
-        }
+        "responses": { "200": { "description": "Arduino ditambahkan" } }
       },
-      "put": {
-        "summary": "Update Arduino",
-        "tags": ["Arduinos"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
+      "put": { "tags": ["Arduino"], "summary": "Ubah arduino",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ip": { "type": "string" },
-                  "login": { "type": "string" },
-                  "password": { "type": "string" },
-                  "arduino_name": { "type": "string" },
-                  "status": { "type": "boolean" }
-                }
-              }
+              "schema": { "type": "object", "properties": { "id": { "type": "string" }, "home_id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "boolean" } } }
             }
           }
         },
-        "responses": {
-          "200": { "description": "Arduino diperbarui" }
-        }
-      },
-      "delete": {
-        "summary": "Hapus Arduino",
-        "tags": ["Arduinos"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
-        "responses": {
-          "200": { "description": "Arduino dihapus" }
-        }
+        "responses": { "200": { "description": "Arduino diubah" } }
       }
+    },
+    "/arduino/{id}": {
+      "get": { "tags": ["Arduino"], "summary": "Detail arduino", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail arduino" } } },
+      "delete": { "tags": ["Arduino"], "summary": "Hapus arduino", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Arduino dihapus" } } }
+    },
+    "/arduino/status/:id": {
+      "get": { "tags": ["Arduino"], "summary": "Detail status arduino", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail status arduino" } } },
+      "delete": { "tags": ["Arduino"], "summary": "Hapus status arduino", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Arduino status dihapus" } } }
+    },
+    "/arduino/expanded/:id": {
+      "get": { "tags": ["Arduino"], "summary": "Detail arduino dan device", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail arduino dan device" } } }
+    },
+    "/device": {
+      "get": { "tags": ["Devices"], "summary": "Ambil semua device", "responses": { "200": { "description": "Daftar device" } } },
+      "post": { "tags": ["Devices"], "summary": "Tambah device",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "arduino_id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "boolean" }, "start": { "type": "string", "format": "date-time" }, "end": { "type": "string", "format": "date-time" } } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Device ditambahkan" } }
+      },
+      "put": { "tags": ["Devices"], "summary": "Ubah device",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": { "id": { "type": "string" }, "arduino_id": { "type": "string" }, "name": { "type": "string" }, "status": { "type": "boolean" }, "start": { "type": "string", "format": "date-time" }, "end": { "type": "string", "format": "date-time" } } }
+            }
+          }
+        },
+        "responses": { "200": { "description": "Device diubah" } }
+      }
+    },
+    "/device/{id}": {
+      "get": { "tags": ["Devices"], "summary": "Detail device", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Detail device" } } },
+      "delete": { "tags": ["Devices"], "summary": "Hapus device", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Device dihapus" } } }
     }
   }
 }
