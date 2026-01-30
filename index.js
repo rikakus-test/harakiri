@@ -33,4 +33,8 @@ app.use(homeRoutes);
 app.use(arduinoRoutes);
 app.get("/", (req, res) => res.send("Express on"));
 
-app.listen(process.env.PORT || 80, "0.0.0.0" );
+const PORT = process.env.PORT;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server running on port", PORT);
+});
