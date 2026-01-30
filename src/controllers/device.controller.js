@@ -8,30 +8,30 @@ module.exports = {
   items: async (req, res) => {
     try {
       deviceModel
-        .getAllData()
+        .getAll()
         .then(async (result) => {
-          success(res, result, "success", "Berhasil Mendapatkan Item");
+          success(res, result, "success", "Berhasil Mendapatkan Device");
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Mendapatkan Item");
+          failed(res, err.message, "failed", "Gagal Mendapatkan Device");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal  Mendapatkan Item");
+      failed(res, err.message, "failed", "Gagal  Mendapatkan Device");
     }
   },
   itemsDetail: async (req, res) => {
     try {
       const id = req.params.id;
       deviceModel
-        .getDataId(id)
+        .getById(id)
         .then(async (result) => {
-          success(res, result, "success", "Berhasil Mendapatkan Item");
+          success(res, result, "success", "Berhasil Mendapatkan Device");
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Mendapatkan Item");
+          failed(res, err.message, "failed", "Gagal Mendapatkan Device");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal  Mendapatkan Item");
+      failed(res, err.message, "failed", "Gagal  Mendapatkan Device");
     }
   },
   addItems: async (req, res) => {
@@ -40,15 +40,15 @@ module.exports = {
       const { name, status} = body;
       const id = uuidv4();
       deviceModel
-        .addItems({ id, name, status})
+        .create({ id, name, status})
         .then((result) => {
-          success(res, { ...result, id }, "success", "Berhasil Menambah Item");
+          success(res, { ...result, id }, "success", "Berhasil Menambah Device");
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Menambah Item");
+          failed(res, err.message, "failed", "Gagal Menambah Device");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal Menambah Item");
+      failed(res, err.message, "failed", "Gagal Menambah Device");
     }
   },
 updateItems: async (req, res) => {
@@ -57,32 +57,38 @@ updateItems: async (req, res) => {
     const { id, name, status } = body;
 
     deviceModel
-      .editItems({ id, name, status })
+      .update({ id, name, status })
       .then((result) => {
         const updatedItem = { ...result, id, name, status };
 
-        success(res, updatedItem, "success", "Berhasil Mengubah Item");
+        success(res, updatedItem, "success", "Berhasil Mengubah Device");
       })
       .catch((err) => {
-        failed(res, err.message, "failed", "Gagal Mengubah Item");
+        failed(res, err.message, "failed", "Gagal Mengubah Device");
       });
   } catch (err) {
-    failed(res, err.message, "failed", "Gagal Mengubah Item");
+    failed(res, err.message, "failed", "Gagal Mengubah Device");
   }
 },
   deleteItems: async (req, res) => {
     try {
       const id = req.params.id;
 
-      deviceModel.deleteItems(id)
+      deviceModel
+        .delete(id)
         .then((result) => {
-          success(res, { ...result, id }, "success", "Berhasil Menghapus Item");
+          success(
+            res,
+            { ...result, id },
+            "success",
+            "Berhasil Menghapus Device"
+          );
         })
         .catch((err) => {
-          failed(res, err.message, "failed", "Gagal Menghapus Item");
+          failed(res, err.message, "failed", "Gagal Menghapus Device");
         });
     } catch (err) {
-      failed(res, err.message, "failed", "Gagal Menghapus Item");
+      failed(res, err.message, "failed", "Gagal Menghapus Device");
     }
   },
 };

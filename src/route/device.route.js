@@ -10,11 +10,11 @@ const {items,
 const router = express.Router();
 
 router
-  .get("/items", items)
-  .get("/items/:id", itemsDetail)
-  .post("/items", addItems)
-  .put("/itemstatus/:id", updateItems)
-  .delete("/items/:id", deleteItems)
+  .get("/device", items)
+  .get("/device/:id", itemsDetail)
+  .post("/device", addItems)
+  .put("/device", updateItems)
+  .delete("/device/:id", deleteItems)
 
 
 module.exports = router;
