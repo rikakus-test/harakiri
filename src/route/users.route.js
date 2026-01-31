@@ -6,6 +6,8 @@ const {
   updateUser,
   deleteUser,
   bindingHome,
+  login,
+  register
 } = require("../controllers/users.controller");
 
 const router = express.Router();
@@ -16,7 +18,9 @@ router
   .post("/users", addUser)
   .put("/users", updateUser)
   .delete("/users/:id", deleteUser)
-  .put("/binding/:id",  bindingHome)
+  .put("/binding/:id", bindingHome)
+  .post("/login", login)
+  .post("/register", register);
 
 
 module.exports = router;

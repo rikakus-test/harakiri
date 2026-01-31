@@ -55,8 +55,22 @@ const userModel = {
   },
   binding: (id, home_id) => {
     return new Promise((resolve, reject) => {
-      db.query("UPDATE users SET home_id = ? WHERE id = ?", [home_id, id], (err, res) => {
-        if (err) return reject(err);
+      db.query(
+        "UPDATE users SET home_id = ? WHERE id = ?",
+        [home_id, id],
+        (err, res) => {
+          if (err) return reject(err);
+          resolve(res);
+        }
+      );
+    });
+  },
+  getDataEmail: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM users WHERE email='${email}'`, (err, res) => {
+        if (err) {
+          reject(err);
+        }
         resolve(res);
       });
     });
