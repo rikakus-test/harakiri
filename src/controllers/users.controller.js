@@ -200,7 +200,7 @@ module.exports = {
               home_id,
               username,
               email,
-              password: hash,
+              pass: hash,
               role,
             })
             .then((result) => {
