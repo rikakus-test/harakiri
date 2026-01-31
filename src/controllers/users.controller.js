@@ -193,7 +193,7 @@ module.exports = {
 
         const id = uuidv4();
 
-        if (send) {
+        // if (send) {
           userModel
             .create({
               id,
@@ -209,11 +209,11 @@ module.exports = {
             .catch((err) => {
               failed(res, err.message, "failed", "Gagal Mendaftar");
             });
-        } else {
-          console.log(send);
+        // } else {
+          // console.log(send);
 
-          failed(res, "Gagal Kirim Email", "failed", "Gagal Mendaftar");
-        }
+          // failed(res, "Gagal Kirim Email", "failed", "Gagal Mendaftar");
+        // }
       });
     } catch (err) {
       failed(res, err.message, "failed", "Gagal Memasukan Data");
