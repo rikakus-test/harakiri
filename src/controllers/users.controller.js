@@ -124,42 +124,10 @@ module.exports = {
           //   );
         // } 
           else {
-            bcrypt.compare(password, result[0].password).then(async (match) => {
+            bcrypt.compare(password, result[0].pass).then(async (match) => {
               if (match) {
-                const {
-                  nama,
-                  email,
-                  password,
-                  role,
-                  dibuat,
-                  diupdate,
-                  id,
-                  jenis_kelamin,
-                  agama,
-                  tanggal_lahir,
-                  alamat,
-                  token,
-                  ktp,
-                  no_hp,
-                } = result[0];
-                const tokenData = {
-                  nama,
-                  email,
-                  password,
-                  role,
-                  dibuat,
-                  diupdate,
-                  id,
-                  jenisKelamin: jenis_kelamin,
-                  agama,
-                  tanggalLahir: tanggal_lahir,
-                  alamat,
-                  token,
-                  ktp,
-                  noHp: no_hp,
-                };
                 // const token = await jwtToken(tokenData);
-                success(res, tokenData, "success", "Berhasil Masuk");
+                success(res, result[0], "success", "Berhasil Masuk");
               } else {
                 failed(
                   res,
