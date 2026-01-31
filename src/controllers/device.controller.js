@@ -37,12 +37,17 @@ module.exports = {
   addItems: async (req, res) => {
     try {
       const body = req.body;
-      const { name, status} = body;
+      const { arduino_id, name, status, start, end } = body;
       const id = uuidv4();
       deviceModel
-        .create({ id, name, status})
+        .create({ id, arduino_id, name, status, start, end })
         .then((result) => {
-          success(res, { ...result, id }, "success", "Berhasil Menambah Device");
+          success(
+            res,
+            { ...result, id },
+            "success",
+            "Berhasil Menambah Device"
+          );
         })
         .catch((err) => {
           failed(res, err.message, "failed", "Gagal Menambah Device");
@@ -54,12 +59,12 @@ module.exports = {
 updateItems: async (req, res) => {
   try {
     const body = req.body;
-    const { id, name, status } = body;
+    const { id, arduino_id, name, status, start, end } = body;
 
     deviceModel
-      .update({ id, name, status })
+      .update({ id, arduino_id, name, status, start, end })
       .then((result) => {
-        const updatedItem = { ...result, id, name, status };
+        const updatedItem = { ...result, id, name, status, arduino_id };
 
         success(res, updatedItem, "success", "Berhasil Mengubah Device");
       })
