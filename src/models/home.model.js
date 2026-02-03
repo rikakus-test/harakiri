@@ -21,19 +21,27 @@ const homeModel = {
 
   create: ({ id, name }) => {
     return new Promise((resolve, reject) => {
-      db.query("INSERT INTO home (id, name) VALUES (?, ?)", [id, name], (err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+      db.query(
+        "INSERT INTO home (id, name) VALUES (?, ?)",
+        [id, name],
+        (err, res) => {
+          if (err) reject(err);
+          resolve(res);
+        },
+      );
     });
   },
 
   update: ({ id, name }) => {
     return new Promise((resolve, reject) => {
-      db.query("UPDATE home SET name = ? WHERE id = ?", [name, id], (err, res) => {
-        if (err) reject(err);
-        resolve(res);
-      });
+      db.query(
+        "UPDATE home SET name = ? WHERE id = ?",
+        [name, id],
+        (err, res) => {
+          if (err) reject(err);
+          resolve(res);
+        },
+      );
     });
   },
 
@@ -48,14 +56,45 @@ const homeModel = {
   getHomeWithRelations: (id) => {
     return new Promise((resolve, reject) => {
       const query = `
-        SELECT 
-          h.*,
-          (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', u.id, 'username', u.username, 'email', u.email))
-           FROM users u WHERE u.home_id = h.id) AS users,
-          (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', a.id, 'name', a.name, 'status', a.status))
-           FROM arduino a WHERE a.home_id = h.id) AS arduino
-        FROM home h
-        WHERE h.id = ?;
+SELECT 
+  h.*,
+  (
+    SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'id', u.id,
+        'username', u.username,
+        'email', u.email
+      )
+    )
+    FROM users u
+    WHERE u.home_id = h.id
+  ) AS users,
+
+  (
+    SELECT JSON_ARRAYAGG(
+      JSON_OBJECT(
+        'id', a.id,
+        'name', a.name,
+        'status', a.status,
+        'devices', (
+          SELECT JSON_ARRAYAGG(
+            JSON_OBJECT(
+              'id', d.id,
+              'name', d.name,
+              'status', d.status
+            )
+          )
+          FROM device d
+          WHERE d.arduino_id = a.id
+        )
+      )
+    )
+    FROM arduino a
+    WHERE a.home_id = h.id
+  ) AS arduino
+
+FROM home h
+WHERE h.id = ?;
       `;
 
       db.query(query, [id], (err, res) => {
